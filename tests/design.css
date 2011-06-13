@@ -17,3 +17,19 @@ table {
 	margin-left: 50px;
 	margin-right: 40%;
 }
+
+nav {
+  border: 1px solid gray;
+  text-align: center;
+  padding: 3px 0px;
+  font-family: courier;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

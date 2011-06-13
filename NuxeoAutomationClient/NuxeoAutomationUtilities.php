@@ -221,7 +221,18 @@
         $answer = @stream_get_contents($fp);
 
         if (!isset($answer) OR $answer == false)
+        {
           echo 'Error Server';
+          echo "<pre>";
+          echo "<hr />";
+          echo "Server request\n";
+          var_dump($params);
+          var_dump($this);
+          echo "<hr />";
+          echo "Server response\n";
+          var_dump($answer);
+          echo "</pre>";
+        }
         else{
           if (null == json_decode($answer, true)){
             $documents = $answer;

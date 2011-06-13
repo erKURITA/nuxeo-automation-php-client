@@ -88,7 +88,7 @@
 
     Public function Document ($newDocument = NULL) {
       $this->object = $newDocument;
-      if (array_key_exists('properties', $this->object))
+      if (is_array($this->object) && array_key_exists('properties', $this->object))
         $this->properties = $this->object['properties'];
       else
         $this->properties = null;
@@ -170,6 +170,10 @@
       elseif(!empty($newDocList['uid'])){
         $this->documentsList[] = new Document($newDocList);
       }elseif(is_array($newDocList)){
+        echo "<pre>";
+        var_dump($this);
+        var_dump($newDocList);
+        echo "</pre>";
         echo 'file not found';
       }else{
         return $newDocList;
