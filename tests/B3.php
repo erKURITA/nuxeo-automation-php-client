@@ -18,16 +18,15 @@
 
 <?php
 
-  function DateSearch($date) {
-    $utilities = new Nuxeo_Utilities();
-
-    $configuration = Configuration::getInstance();
-
-    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
-
-    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
-
-    $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Document WHERE dc:created >= DATE '". $utilities->dateConverterPhpToNuxeo($date) ."'")->sendRequest();
+  function DateSearch($date)
+  {
+    $utilities      = new Nuxeo_Utilities();
+    $configuration  = Configuration::getInstance();
+    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
+    $answer         = $session->newRequest("Document.Query")
+                        ->set('params', 'query', "SELECT * FROM Document WHERE dc:created >= DATE '". $utilities->dateConverterPhpToNuxeo($date) ."'")
+                        ->sendRequest();
 
     $documents = $answer->getDocumentList();
     ?>
@@ -44,8 +43,7 @@
       </thead>
       <tbody>
 <?php
-    foreach($documents as $document)
-    {
+    foreach($documents as $document) {
 ?>
         <tr>
           <td><pre><?= $document->getUid() ?></pre></td>
@@ -67,15 +65,12 @@
     </table><?php
   }
 
-  if (isset($_POST) && $_POST != array())
-  {
-    if(!isset($_POST['date']) OR empty($_POST['date'])){
+  if (isset($_POST) && $_POST != array()) {
+    if(!isset($_POST['date']) OR empty($_POST['date'])) {
       echo 'date is empty';
-    }else{
-      $top = new Nuxeo_Utilities();
-
+    } else {
+      $top  = new Nuxeo_Utilities();
       $date = $top->dateConverterInputToPhp($_POST['date']);
-
       dateSearch($date);
     }
   }

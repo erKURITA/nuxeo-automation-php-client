@@ -19,28 +19,24 @@
         </tr>
         <tr>
           <td>File Path</td>
-          <td><?php
+          <td>
+<?php
 
-  $configuration = Configuration::getInstance();
-
-  $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
-
-  $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
-
-  $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Workspace")->setSchema()->sendRequest();
+  $configuration  = Configuration::getInstance();
+  $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+  $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
+  $answer         = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Workspace")->setSchema()->sendRequest();
 
   $documents = $answer->getDocumentList();
-
 ?>
             <select name="TargetDocumentPath">
 <?php
-  foreach($documents as $document)
-  {
-    ?>
+  foreach($documents as $document) {
+?>
               <option value="<?=$document->getPath()?>"><?= $document->getTitle()?></option>
-    <?php
+<?php
   }
-  ?>
+?>
             </select>
           </td>
         </tr>
@@ -61,8 +57,8 @@
    * @param String $filePath contains the path of the folder where the fille holding the blob will be created
    * @param String $blobtype contains the type of the blob (given by the $_FILES['blobPath']['type'])
    */
-  function attachBlob($blob = '../test.txt', $filePath = '/default-domain/workspaces/jkjkj/teezeareate.1304515647395', $blobtype = 'application/binary'){
-
+  function attachBlob($blob = '../test.txt', $filePath = '/default-domain/workspaces/jkjkj/teezeareate.1304515647395', $blobtype = 'application/binary')
+  {
     //only works on LINUX / MAC
     // We get the name of the file to use it for the name of the document
     $ename = explode("/", $blob);
@@ -77,28 +73,30 @@
     $answer = $session->newRequest("Document.Create")->set('input', 'doc:' . $filePath)->set('params', 'type', 'File')->set('params', 'name', end($ename))->sendRequest();
 
     //We upload the file
-    $answer = $session->newRequest("Blob.Attach")->set('params', 'document', $answer->getDocument(0)->getPath())
-    ->loadBlob($blob, $blobtype)
-    ->sendRequest();
+    $answer = $session->newRequest("Blob.Attach")
+                ->set('params', 'document', $answer->getDocument(0)->getPath())
+                ->loadBlob($blob, $blobtype)
+                ->sendRequest();
   }
 
 
-  if (isset($_POST) && $_POST != array())
-  {
-    if(!isset($_FILES['blobPath']) AND $_FILES['blobPath']['error'] == 0){
+  if (isset($_POST) && $_POST != array()) {
+    if(!isset($_FILES['blobPath']) AND $_FILES['blobPath']['error'] == 0) {
       echo 'BlobPath is empty';
       exit;
     }
 
-    if(!isset($_POST['TargetDocumentPath']) OR empty($_POST['TargetDocumentPath'])){
+    if(!isset($_POST['TargetDocumentPath']) || empty($_POST['TargetDocumentPath'])) {
       echo 'TargetDocumentPath is empty';
       exit;
     }
 
-    if ((isset($_FILES['blobPath'])&&($_FILES['blobPath']['error'] == UPLOAD_ERR_OK))) {
+    if ((isset($_FILES['blobPath']) && ($_FILES['blobPath']['error'] == UPLOAD_ERR_OK))) {
       $targetPath = 'blobs';
+
       if (!is_dir('blobs'))
         mkdir('blobs');
+
       move_uploaded_file($_FILES['blobPath']['tmp_name'], $targetPath.$_FILES['blobPath']['name']);
     }
 

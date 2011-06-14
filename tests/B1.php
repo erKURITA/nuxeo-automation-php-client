@@ -23,15 +23,15 @@
       <br />
 <?php
 
-  function openDocumentPropeties($path, $propertiesSchema = '*') {
-
-    $configuration = Configuration::getInstance();
-
-    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
-
-    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
-
-    $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Document WHERE ecm:path = '". $path ."'")->setSchema($propertiesSchema)->sendRequest();
+  function openDocumentPropeties($path, $propertiesSchema = '*')
+  {
+    $configuration  = Configuration::getInstance();
+    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
+    $answer         = $session->newRequest("Document.Query")
+                        ->set('params', 'query', "SELECT * FROM Document WHERE ecm:path = '". $path ."'")
+                        ->setSchema($propertiesSchema)
+                        ->sendRequest();
 
     $documents = $answer->getDocumentList();
     ?>
@@ -50,8 +50,7 @@
       </thead>
       <tbody>
 <?php
-    foreach($documents as $document)
-    {
+    foreach($documents as $document) {
 ?>
         <tr>
           <td><pre><?= $document->getUid() ?></pre></td>
@@ -75,12 +74,10 @@
     </table><?php
   }
 
-  if (isset($_POST) && $_POST != array())
-  {
-    if(!isset($_POST['path']) || empty($_POST['path'])){
+  if (isset($_POST) && $_POST != array()) {
+    if(!isset($_POST['path']) || empty($_POST['path'])) {
       echo 'path is empty';
-    }
-    else{
+    } else {
       if(isset($_POST['schema']) && !empty($_POST['schema']))
         openDocumentPropeties($_POST['path'], $_POST['schema']);
       else

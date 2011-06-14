@@ -17,15 +17,14 @@
     <br/>
 <?php
 
-  function fullTextSearch($research) {
-
-    $configuration = Configuration::getInstance();
-
-    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
-
-    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
-
-    $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Document WHERE ecm:fulltext = '". $research ."'")->sendRequest();
+  function fullTextSearch($research)
+  {
+    $configuration  = Configuration::getInstance();
+    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
+    $answer         = $session->newRequest("Document.Query")
+                        ->set('params', 'query', "SELECT * FROM Document WHERE ecm:fulltext = '". $research ."'")
+                        ->sendRequest();
 
     $documents = $answer->getDocumentList();
     ?>
@@ -42,8 +41,7 @@
       </thead>
       <tbody>
 <?php
-    foreach($documents as $document)
-    {
+    foreach($documents as $document) {
 ?>
         <tr>
           <td><pre><?= $document->getUid() ?></pre></td>
@@ -65,14 +63,12 @@
     </table><?php
   }
 
-  if (isset($_POST) && $_POST != array())
-  {
+  if (isset($_POST) && $_POST != array()) {
     if(!isset($_POST['research']) OR empty($_POST['research']))
       echo 'research is empty';
     else
       fullTextSearch($_POST['research']);
   }
-
 ?>
   </body>
 </html>

@@ -19,14 +19,15 @@ class Nuxeo_Request
   private $_blobList;
   private $_X_NXVoidOperation;
 
-  public function __construct($url, $headers = "Content-Type:application/json+nxrequest", $requestId) {
-    $this->_url = $url . "/" . $requestId;
-    $this->_headers = $headers;
-    $this->_finalRequest = '{}';
-    $this->_method = 'POST';
-    $this->_iterationNumber = 0;
+  public function __construct($url, $headers = "Content-Type:application/json+nxrequest", $requestId)
+  {
+    $this->_url               = $url."/".$requestId;
+    $this->_headers           = $headers;
+    $this->_finalRequest      = '{}';
+    $this->_method            = 'POST';
+    $this->_iterationNumber   = 0;
     $this->_HEADER_NX_SCHEMAS = 'X-NXDocumentProperties:';
-    $this->_blobList = null;
+    $this->_blobList          = null;
     $this->_X_NXVoidOperation = 'X-NXVoidOperation: true';
   }
 
@@ -40,8 +41,9 @@ class Nuxeo_Request
    * @param      $headerValue value taken by the header
    * @author     Arthur GALLOUIN for NUXEO agallouin@nuxeo.com
    */
-  public function setX_NXVoidOperation($headerValue = '*'){
-    $this->_X_NXVoidOperation = 'X-NXVoidOperation:'. $headerValue;
+  public function setX_NXVoidOperation($headerValue = '*')
+  {
+    $this->_X_NXVoidOperation = 'X-NXVoidOperation:'.$headerValue;
   }
 
   /**
@@ -52,7 +54,8 @@ class Nuxeo_Request
    * @param    $schema : name the schema you want to obtain
    * @author     Arthur GALLOUIN for NUXEO agallouin@nuxeo.com
    */
-  public function setSchema($schema = '*'){
+  public function setSchema($schema = '*')
+  {
     $this->_headers = array($this->_headers, $this->_HEADER_NX_SCHEMAS . $schema);
     return $this;
   }
@@ -68,34 +71,32 @@ class Nuxeo_Request
    *         $requestVarVallue : vallue of the var define in $requestContentTypeOrVarName(if needed)
    * @author     Arthur GALLOUIN for NUXEO agallouin@nuxeo.com
    */
-  public function set($requestType, $requestContentOrVarName, $requestVarVallue =  NULL){
-
-    if ($requestVarVallue !== NULL){
-      if ($this->_iterationNumber === 0){
+  public function set($requestType, $requestContentOrVarName, $requestVarVallue =  NULL)
+  {
+    if ($requestVarVallue !== NULL) {
+      if ($this->_iterationNumber === 0) {
         $this->_finalRequest = array(
             $requestType=> array( $requestContentOrVarName => $requestVarVallue)
           );
-      }else if ($this->_iterationNumber === 1) {
+      } else if ($this->_iterationNumber === 1) {
         $this->_finalRequest[$requestType] = array($requestContentOrVarName => $requestVarVallue);
-      }else if ($this->_iterationNumber === 2){
+      } else if ($this->_iterationNumber === 2) {
         $this->_finalRequest[$requestType][$requestContentOrVarName] = $requestVarVallue;
       }
-
       $this->_iterationNumber = 2;
-    }else{
-      if ($this->_iterationNumber === 0){
+    } else {
+      if ($this->_iterationNumber === 0) {
         $this->_finalRequest = array(
-            $requestType=> $requestContentOrVarName
-          );
-      }else{
+          $requestType => $requestContentOrVarName
+        );
+      } else {
         $this->_finalRequest[$requestType] = $requestContentOrVarName;
       }
-
       if ($this->_iterationNumber === 0)
         $this->_iterationNumber = 1;
     }
 
-      return $this;
+    return $this;
   }
 
   /**
@@ -106,8 +107,8 @@ class Nuxeo_Request
    *
    * @author     Arthur GALLOUIN for NUXEO agallouin@nuxeo.com
    */
-  private function _multiPart(){
-
+  private function _multiPart()
+  {
     if (sizeof($this->_blobList) > 1 AND !isset($this->_finalRequest['params']['xpath']))
       $this->_finalRequest['params']['xpath'] = 'files:files';
 
@@ -118,26 +119,22 @@ class Nuxeo_Request
     $this->_headers = array($this->_headers, 'Content-ID: request');
 
     $requestheaders = 'Content-Type: application/json+nxrequest; charset=UTF-8'."\r\n".
-              'Content-Transfer-Encoding: 8bit'."\r\n".
-              'Content-ID: request'."\r\n".
-              'Content-Length:'.strlen($this->_finalRequest)."\r\n"."\r\n";
-
-    $value = sizeof($this->_blobList);
+                      'Content-Transfer-Encoding: 8bit'."\r\n".
+                      'Content-ID: request'."\r\n".
+                      'Content-Length:'.strlen($this->_finalRequest)."\r\n"."\r\n";
 
     $boundary = '====Part=' . time() . '='.(int)rand(0, 1000000000). '===';
+    $data     = "--" . $boundary . "\r\n" .
+                $requestheaders .
+                $this->_finalRequest . "\r\n" ."\r\n";
 
-    $data = "--" . $boundary . "\r\n" .
-          $requestheaders .
-          $this->_finalRequest . "\r\n" ."\r\n";
-
-    for ($cpt = 0; $cpt < $value; $cpt++){
-
+    foreach($this->_blobList as $blob) {
       $data = $data . "--" . $boundary . "\r\n" ;
 
-      $blobheaders = 'Content-Type:'.$this->_blobList[$cpt][1]."\r\n".
+      $blobheaders = 'Content-Type:'.$blob[1]."\r\n".
                  'Content-ID: input'. "\r\n" .
                      'Content-Transfer-Encoding: binary'."\r\n" .
-                     'Content-Disposition: attachment;filename='. $this->_blobList[$cpt][0].
+                     'Content-Disposition: attachment;filename='.$blob[0].
                      "\r\n" ."\r\n";
 
       $data = "\r\n". $data .
@@ -145,23 +142,21 @@ class Nuxeo_Request
                   $this->_blobList[$cpt][2] . "\r\n"."\r\n";
     }
 
-    $data = $data ."--" . $boundary."--";
+    $data   = $data ."--" . $boundary."--";
+    $final  = array(
+      'http' => array(
+        'method'  => 'POST',
+        'content' => $data,
+        'header'  => 'Accept: application/json+nxentity, */*'. "\r\n".
+                     'Content-Type: multipart/related;boundary="'.$boundary.
+                     '";type="application/json+nxrequest";start="request"'.
+                     "\r\n". $this->_X_NXVoidOperation
+      )
+    );
 
-          $final = array('http'=> array(
-                    'method' => 'POST',
-                    'content' => $data));
-
-    $final['http']['header'] = 'Accept: application/json+nxentity, */*'. "\r\n".
-                           'Content-Type: multipart/related;boundary="'.$boundary.
-                           '";type="application/json+nxrequest";start="request"'.
-                           "\r\n". $this->_X_NXVoidOperation;
-
-          $final = stream_context_create($final);
-
-          $fp = @fopen($this->_url, 'rb', false, $final);
-
-          $answer = @stream_get_contents($fp);
-
+    $final  = stream_context_create($final);
+    $fp     = @fopen($this->_url, 'rb', false, $final);
+    $answer = @stream_get_contents($fp);
     $answer = json_decode($answer, true);
 
     return $answer;
@@ -172,22 +167,23 @@ class Nuxeo_Request
    * loadBlob function
    * Many blobs could be loaded, they will be store in a blob array
    *
-   * @param $adresse : contains the path of the file to load
+   * @param $address : contains the path of the file to load
    * @param $contentType : type of the blob content (default : 'application/binary')
    */
-  public function loadBlob($adresse, $contentType  = 'application/binary'){
-    if(!$this->_blobList){
+  public function loadBlob($address, $contentType  = 'application/binary')
+  {
+    if(!$this->_blobList) {
       $this->_blobList = array();
     }
-    $eadresse = explode("/", $adresse);
+    $eaddress = explode("/", $address);
 
-    $fp = fopen($adresse, "r");
+    $fp = fopen($address, "r");
 
     if (!$fp)
       echo 'error loading the file';
 
     $futurBlob = stream_get_contents($fp);
-    $temp = str_replace(" ", "", end($eadresse));
+    $temp = str_replace(" ", "", end($eaddress));
     $this->_blobList[] = array($temp, $contentType, print_r($futurBlob, true));
 
     return $this;
@@ -200,47 +196,42 @@ class Nuxeo_Request
    *
    * @author     Arthur GALLOUIN for NUXEO agallouin@nuxeo.com
    */
-  public function sendRequest(){
-    if (!$this->_blobList){
-
+  public function sendRequest()
+  {
+    if (!$this->_blobList) {
       $documents = null;
 
       $this->_finalRequest = json_encode($this->_finalRequest);
-
       $this->_finalRequest = str_replace('\/', '/', $this->_finalRequest);
-
-      $params = array('http' => array(
-                'method' => $this->_method,
-                'content' => $this->_finalRequest
+      $params = array(
+        'http' => array(
+          'method' => $this->_method,
+          'content' => $this->_finalRequest
       ));
+
       if ($this->_headers !== null) {
         $params['http']['header'] = $this->_headers;
       }
 
-      $ctx = stream_context_create($params);
+      $context  = stream_context_create($params);
+      $fp       = @fopen($this->_url, 'rb', false, $context);
+      $answer   = @stream_get_contents($fp);
 
-      $fp = @fopen($this->_url, 'rb', false, $ctx);
-
-      $answer = @stream_get_contents($fp);
-
-      if (!isset($answer) OR $answer == false)
-      {
+      if (!isset($answer) OR $answer == false) {
         echo "<pre>";
         echo "<hr />";
-        echo "Server request\n";
+        echo "<h2>Server request</h2>\n";
         var_dump($params);
         var_dump($this);
         echo "<hr />";
-        echo "Server response\n";
+        echo "<h2>Server response</h2>\n";
         var_dump($answer);
         echo "</pre>";
-      }
-      else{
-        if (null == json_decode($answer, true)){
+      } else {
+        if (null == json_decode($answer, true)) {
           $documents = $answer;
           file_put_contents("tempstream", $answer);
-        }
-        else{
+        } else {
           $answer = json_decode($answer, true);
           $documents = new Nuxeo_Documents($answer);
         }

@@ -11,7 +11,8 @@ class Nuxeo_PhpAutomationClient
 {
   private $url;
 
-  public function __construct($url = 'http://localhost:8080/nuxeo/site/automation'){
+  public function __construct($url = 'http://localhost:8080/nuxeo/site/automation')
+  {
     $this->url = $url;
   }
 
@@ -24,7 +25,8 @@ class Nuxeo_PhpAutomationClient
    *             $password : password matching the usename
    * @author     Arthur GALLOUIN for NUXEO agallouin@nuxeo.com
    */
-  public function getSession($username = 'Administrator', $password = 'Administrator'){
+  public function getSession($username = 'Administrator', $password = 'Administrator')
+  {
     $this->session = $username . ":" . $password;
     $session = new Nuxeo_Session($this->url, $this->session);
     return $session;

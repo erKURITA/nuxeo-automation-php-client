@@ -6,15 +6,16 @@
  * @author erkurita
  *
  */
-class Configuration {
-  private $_config = array(
-      'host'            => 'localhost',
-      'port'            => '8080',
-      'is_https_secure' => false,
-      'username'        => 'Administrator',
-      'password'        => 'Administrator',
-      'automation_path' => '/nuxeo/site/automation'
-    );
+class Configuration
+{
+  private $_config          = array(
+    'host'            => 'localhost',
+    'port'            => '8080',
+    'is_https_secure' => false,
+    'username'        => 'Administrator',
+    'password'        => 'Administrator',
+    'automation_path' => '/nuxeo/site/automation'
+  );
   private static $_instance = null;
 
 
@@ -82,13 +83,10 @@ class Configuration {
    */
   public function __call($name, array $arguments)
   {
-    if (strpos($name,'get') === 0)
-    {
+    if (strpos($name,'get') === 0) {
       $name = implode('',explode('get', $name));
       return $this->_getProperty($name);
-    }
-    else if (strpos($name,'get') === 0)
-    {
+    } else if (strpos($name,'get') === 0) {
       $name = implode('',explode('set', $name));
       return $this->_setProperty($name,$arguments[0]);
     }
@@ -164,7 +162,7 @@ class Configuration {
    */
   static public function getInstance(array $configuration = array())
   {
-    if (is_null(self::$_instance)){
+    if (is_null(self::$_instance)) {
       self::$_instance = new Configuration($configuration);
     }
 
@@ -215,11 +213,12 @@ class Configuration {
   static public function camelize($name)
   {
     $camelized = array_reduce(
-              explode('_', strtolower($name)),
-              function($elementa, $elementb){
-                return ucfirst(trim($elementa)).''.ucfirst(trim($elementb));
-              }
-             );
+      explode('_', strtolower($name)),
+      function($elementa, $elementb)
+      {
+        return ucfirst(trim($elementa)).''.ucfirst(trim($elementb));
+      }
+    );
 
     $camelized = lcfirst($camelized);
 

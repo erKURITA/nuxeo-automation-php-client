@@ -27,22 +27,20 @@
           </td>
         </tr>
       </table>
-    </form><?php
+    </form>
+<?php
 
-  function GetBlob($path = '/default-domain/workspaces/jkjkj/test2.rtf', $blobtype = 'application/binary') {
-    $eurl = explode("/", $path);
+  function GetBlob($path = '/default-domain/workspaces/jkjkj/test2.rtf', $blobtype = 'application/binary')
+  {
+    $eurl           = explode("/", $path);
+    $configuration  = Configuration::getInstance();
+    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
+    $answer         = $session->newRequest("Blob.Get")->set('input', 'doc: ' . $path)->sendRequest();
 
-    $configuration = Configuration::getInstance();
-
-    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
-
-    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
-
-    $answer = $session->NewRequest("Blob.Get")->Set('input', 'doc: ' . $path)->SendRequest();
-
-    if (!isset($answer) OR $answer == false)
+    if (!isset($answer) || $answer == false)
       echo '$answer is not set';
-    else{
+    else {
       header('Content-Description: File Transfer');
       header('Content-Type: application/octet-stream');
       header('Content-Disposition: attachment; filename='.end($eurl).'.pdf');
@@ -50,9 +48,8 @@
     }
   }
 
-  if (isset($_POST) && $_POST != array())
-  {
-    if(!isset($_POST['path'])){
+  if (isset($_POST) && $_POST != array()) {
+    if(!isset($_POST['path'])) {
       echo 'path is empty';
       exit;
     }

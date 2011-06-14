@@ -14,7 +14,8 @@ class Nuxeo_Session
   private $headers;
   private $requestContent;
 
-  public function __construct( $url, $session, $headers = "Content-Type:application/json+nxrequest") {
+  public function __construct( $url, $session, $headers = "Content-Type:application/json+nxrequest")
+  {
     $this->urlLoggedIn = str_replace("http://", "", str_replace("https://", "", $url));
     if (strpos($url,'https') !== false) {
       $this->urlLoggedIn = "https://" . $session . "@" . $this->urlLoggedIn;
@@ -37,7 +38,8 @@ class Nuxeo_Session
    *        for exemple)
    * @author     Arthur GALLOUIN for NUXEO agallouin@nuxeo.com
    */
-  public function newRequest($requestType){
+  public function newRequest($requestType)
+  {
     $newRequest = new Nuxeo_Request($this->urlLoggedIn, $this->headers, $requestType);
     return $newRequest;
   }
