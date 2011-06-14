@@ -3,7 +3,7 @@
   <head>
     <title>B1 test php Client</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" media="screen" type="text/css" title="Designtab" href="designtab.css" />
+    <link rel="stylesheet" media="screen" type="text/css" title="design" href="/tests/design.css" />
   </head>
   <body>
     <?php include 'nav.php' ?>
@@ -13,7 +13,7 @@
       fill the path field with a correct Path and the Schema field
       with the type of schema to output (if left blank, print all properties)
       </pre>
-      <form action="B1.php" method="post">
+      <form action="/B1" method="post">
         <pre>
           <label>Path<input type="text" name ="path"/></label>
           <label>Schema<input type="text" name ="schema"/></label>
@@ -23,13 +23,11 @@
       <br />
 <?php
 
-  include ('../NuxeoAutomationClient/NuxeoAutomationAPI.php');
-
   function openDocumentPropeties($path, $propertiesSchema = '*') {
 
-    require_once '../config.php';
+    $configuration = Configuration::getInstance();
 
-    $client = new PhpAutomationClient($configuration->getUrl(false));
+    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
 
     $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 

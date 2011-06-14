@@ -7,7 +7,7 @@
  *
  */
 class Configuration {
-  private $config = array(
+  private $_config = array(
       'host'            => 'localhost',
       'port'            => '8080',
       'is_https_secure' => false,
@@ -15,6 +15,8 @@ class Configuration {
       'password'        => 'Administrator',
       'automation_path' => '/nuxeo/site/automation'
     );
+  private static $_instance = null;
+
 
   /**
    *
@@ -22,12 +24,12 @@ class Configuration {
    *
    * @param array $configuration
    */
-  public function __construct(array $configuration = array())
+  private function __construct(array $configuration = array())
   {
-    foreach(array_keys($this->config) as $key)
-      $this->config[$key] = (isset($configuration[$key]) && $configuration[$key] != '') ? $configuration[$key] : $this->config[$key];
+    foreach(array_keys($this->_config) as $key)
+      $this->_config[$key] = (isset($configuration[$key]) && $configuration[$key] != '') ? $configuration[$key] : $this->_config[$key];
 
-    $this->config['user_handle'] = $this->getUserHandle();
+    $this->_config['user_handle'] = $this->getUserHandle();
   }
 
   /**
@@ -69,7 +71,7 @@ class Configuration {
    */
   public function isSecure()
   {
-    return $this->getProperty('is_https_secure') === true;
+    return $this->_getProperty('is_https_secure') === true;
   }
 
   /**
@@ -83,15 +85,15 @@ class Configuration {
     if (strpos($name,'get') === 0)
     {
       $name = implode('',explode('get', $name));
-      return $this->getProperty($name);
+      return $this->_getProperty($name);
     }
     else if (strpos($name,'get') === 0)
     {
       $name = implode('',explode('set', $name));
-      return $this->setProperty($name,$arguments[0]);
+      return $this->_setProperty($name,$arguments[0]);
     }
 
-    return $this->error('__call',$name);
+    return $this->_error('__call',$name);
 
   }
 
@@ -101,14 +103,14 @@ class Configuration {
    * @param unknown_type $name
    * @param unknown_type $value
    */
-  private function setProperty($name,$value)
+  private function _setProperty($name,$value)
   {
     $property_name = self::deCamelize($name);
 
-    if (array_key_exists($property_name, $this->config))
-      return $this->config[$property_name] = $value;
+    if (array_key_exists($property_name, $this->_config))
+      return $this->_config[$property_name] = $value;
 
-    return $this->error('getProperty', $property_name);
+    return $this->_error('_setProperty', $property_name);
   }
 
   /**
@@ -117,14 +119,14 @@ class Configuration {
    * @param   string  $name
    * @return  mixed   configuration value
    */
-  private function getProperty($name)
+  private function _getProperty($name)
   {
     $property_name = self::deCamelize($name);
 
-    if (array_key_exists($property_name, $this->config))
-      return $this->config[$property_name];
+    if (array_key_exists($property_name, $this->_config))
+      return $this->_config[$property_name];
 
-    return $this->error('getProperty', $property_name);
+    return $this->_error('_getProperty', $property_name);
 
   }
 
@@ -134,7 +136,7 @@ class Configuration {
    * @param string $method
    * @param string $method_name
    */
-  private function error($method,$method_name)
+  private function _error($method,$method_name)
   {
     $trace = debug_backtrace();
     trigger_error(
@@ -144,6 +146,31 @@ class Configuration {
         E_USER_ERROR);
     return null;
   }
+
+  /**
+   *
+   * Singleton instantiation which calls Configuration::getInstance()
+   * @param array $configuration Configuration for this class
+   */
+  static public function createInstance(array $configuration = array())
+  {
+    return self::getInstance($configuration);
+  }
+
+  /**
+   *
+   * Singleton instantiation
+   * @param array $configuration Configuration for this class
+   */
+  static public function getInstance(array $configuration = array())
+  {
+    if (is_null(self::$_instance)){
+      self::$_instance = new Configuration($configuration);
+    }
+
+    return self::$_instance;
+  }
+
   /**
    *
    * De-constructs a camel-cased string.

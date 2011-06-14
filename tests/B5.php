@@ -3,11 +3,11 @@
   <head>
     <title>B4 test php Client</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" media="screen" type="text/css" title="Design" href="design.css" />
+    <link rel="stylesheet" media="screen" type="text/css" title="design" href="/tests/design.css" />
   </head>
   <body>
     <?php include 'nav.php' ?>
-    <form action="B5.php" method="post">
+    <form action="/B5" method="post">
       <table>
         <tr>
           <td>File Path</td>
@@ -29,16 +29,14 @@
       </table>
     </form><?php
 
-  include ('../NuxeoAutomationClient/NuxeoAutomationAPI.php');
-
   function GetBlob($path = '/default-domain/workspaces/jkjkj/test2.rtf', $blobtype = 'application/binary') {
     $eurl = explode("/", $path);
 
-    require_once '../config.php';
+    $configuration = Configuration::getInstance();
 
-    $client = new PhpAutomationClient($configuration->getUrl(false));
+    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
 
-    $session = $client->GetSession('Administrator','Administrator');
+    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 
     $answer = $session->NewRequest("Blob.Get")->Set('input', 'doc: ' . $path)->SendRequest();
 
@@ -47,8 +45,8 @@
     else{
       header('Content-Description: File Transfer');
       header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename='.end($eurl).'.pdf');
-        readfile('tempstream');
+      header('Content-Disposition: attachment; filename='.end($eurl).'.pdf');
+      readfile('tempstream');
     }
   }
 

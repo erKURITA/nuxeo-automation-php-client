@@ -1,0 +1,20 @@
+Options +FollowSymLinks +ExecCGI
+
+#php_value xdebug.profiler_enable 1
+#php_value xdebug.profiler_output_dir /tmp/xdebug_cachegrind
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # uncomment the following line, if you are having trouble
+  # getting no_script_name to work
+  #RewriteBase /
+
+  # we skip all files with .something
+  RewriteCond %{REQUEST_URI} \..+$
+  RewriteCond %{REQUEST_URI} !\.html$
+  RewriteRule .* - [L]
+  
+  # no, so we redirect to our front web controller
+  RewriteRule ^(.*)$ index.php?site=$1 [QSA,L]
+</IfModule>

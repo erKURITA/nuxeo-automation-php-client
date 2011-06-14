@@ -3,12 +3,12 @@
   <head>
     <title>B3 test php Client</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" media="screen" type="text/css" title="Designtab" href="designtab.css" />
+    <link rel="stylesheet" media="screen" type="text/css" title="design" href="/tests/design.css" />
   </head>
   <body>
     <?php include 'nav.php' ?>
     <pre>Execute a dc:created query to nuxeo. Fill the blank with a date format Y/M/D or a date parseable by DateTime</pre>
-    <form action="B3.php" method="post">
+    <form action="/B3" method="post">
       <pre>
         Date<input type="text" name ="date"/><br /><br />
         <input type="submit" value="Submit"/>
@@ -18,16 +18,14 @@
 
 <?php
 
-  include ('../NuxeoAutomationClient/NuxeoAutomationAPI.php');
-
   function DateSearch($date) {
-    $utilities = new Utilities();
+    $utilities = new Nuxeo_Utilities();
 
-    require_once '../config.php';
+    $configuration = Configuration::getInstance();
 
-    $client = new PhpAutomationClient($configuration->getUrl(false));
+    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
 
-    $session = $client->getSession('Administrator','Administrator');
+    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 
     $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Document WHERE dc:created >= DATE '". $utilities->dateConverterPhpToNuxeo($date) ."'")->sendRequest();
 
@@ -74,7 +72,7 @@
     if(!isset($_POST['date']) OR empty($_POST['date'])){
       echo 'date is empty';
     }else{
-      $top = new Utilities();
+      $top = new Nuxeo_Utilities();
 
       $date = $top->dateConverterInputToPhp($_POST['date']);
 

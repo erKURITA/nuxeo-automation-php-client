@@ -3,13 +3,13 @@
   <head>
     <title>B4 test php Client</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" media="screen" type="text/css" title="Design" href="design.css" />
+    <link rel="stylesheet" media="screen" type="text/css" title="design" href="/tests/design.css" />
   </head>
   <body>
     <?php include 'nav.php' ?>
     <pre>Create a file at the path chosen with file path and attach the blob chosen in
     the blob path field to it.</pre>
-    <form action="B4.php" method="post" enctype="multipart/form-data">
+    <form action="/B4" method="post" enctype="multipart/form-data">
       <table>
         <tr>
           <td>Blob Path</td>
@@ -20,15 +20,14 @@
         <tr>
           <td>File Path</td>
           <td><?php
-  include ('../NuxeoAutomationClient/NuxeoAutomationAPI.php');
 
-  require_once '../config.php';
+  $configuration = Configuration::getInstance();
 
-  $client = new PhpAutomationClient($configuration->getUrl(false));
+  $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
 
-  $session = $client->getSession('Administrator','Administrator');
+  $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 
-  $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Workspace")->setSchema($propertiesSchema)->sendRequest();
+  $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Workspace")->setSchema()->sendRequest();
 
   $documents = $answer->getDocumentList();
 
@@ -46,7 +45,7 @@
           </td>
         </tr>
         <tr>
-          <td>
+          <td colspan="2">
             <input type="submit" value="Submit"/>
           </td>
         </tr>
@@ -68,11 +67,11 @@
     // We get the name of the file to use it for the name of the document
     $ename = explode("/", $blob);
 
-    require_once '../config.php';
+    $configuration = Configuration::getInstance();
 
-    $client = new PhpAutomationClient($configuration->getUrl(false));
+    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
 
-    $session = $client->getSession('Administrator','Administrator');
+    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 
     //We create the document that will hold the file
     $answer = $session->newRequest("Document.Create")->set('input', 'doc:' . $filePath)->set('params', 'type', 'File')->set('params', 'name', end($ename))->sendRequest();
@@ -97,9 +96,9 @@
     }
 
     if ((isset($_FILES['blobPath'])&&($_FILES['blobPath']['error'] == UPLOAD_ERR_OK))) {
-      $targetPath = '../blobs/';
-      if (!is_dir('../blobs'))
-        mkdir('../blobs');
+      $targetPath = 'blobs';
+      if (!is_dir('blobs'))
+        mkdir('blobs');
       move_uploaded_file($_FILES['blobPath']['tmp_name'], $targetPath.$_FILES['blobPath']['name']);
     }
 

@@ -3,12 +3,12 @@
   <head>
     <title>B2 test php Client</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" media="screen" type="text/css" title="Designtab" href="designtab.css" />
+    <link rel="stylesheet" media="screen" type="text/css" title="design" href="/tests/design.css" />
   </head>
   <body>
     <?php include 'nav.php' ?>
     <pre>Execute a SELECT * FROM Document WHERE ecm:fulltext = '". $research ."' query to Nuxeo.</pre>
-    <form action="B2.php" method="post">
+    <form action="/B2" method="post">
       <pre>
         Search<input type="text" name ="research"/><br /> <br />
         <input type="submit" value="Submit"/>
@@ -17,15 +17,13 @@
     <br/>
 <?php
 
-  include ('../NuxeoAutomationClient/NuxeoAutomationAPI.php');
-
   function fullTextSearch($research) {
 
-    require_once '../config.php';
+    $configuration = Configuration::getInstance();
 
-    $client = new PhpAutomationClient($configuration->getUrl(false));
+    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
 
-    $session = $client->getSession('Administrator','Administrator');
+    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 
     $answer = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Document WHERE ecm:fulltext = '". $research ."'")->sendRequest();
 

@@ -1,7 +1,5 @@
 <?php
 
-  include ('../NuxeoAutomationClient/NuxeoAutomationAPI.php');
-
   /**
    *
    * getFileContent function
@@ -12,23 +10,23 @@
 
     $eurl = explode("/", $path);
 
-                $temp = str_replace(" ", "", end($eurl));
+    $temp = str_replace(" ", "", end($eurl));
 
-    require_once '../config.php';
+    $configuration = Configuration::getInstance();
 
-    $client = new PhpAutomationClient($configuration->getUrl(false));
+    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
 
-    $session = $client->getSession('Administrator','Administrator');
+    $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 
     $answer = $session->newRequest("Chain.getDocContent")->set('context', 'path', $path)->sendRequest();
 
     if (!isset($answer) OR $answer == false)
       echo '$answer is not set';
-    else{
+    else {
       header('Content-Description: File Transfer');
       header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename='. $temp .'.pdf');
-        readfile('tempstream');
+      header('Content-Disposition: attachment; filename='. $temp .'.pdf');
+      readfile('tempstream');
     }
   }
 
