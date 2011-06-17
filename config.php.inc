@@ -8,7 +8,8 @@ $default_configuration = array(
   'is_https_secure' => false,
   'username'        => 'Administrator',
   'password'        => 'Administrator',
-  'automation_path' => '/nuxeo/site/automation'
+  'automation_path' => '/nuxeo/site/automation',
+  'temp_path'       => 'blobs'
 );
 
  */

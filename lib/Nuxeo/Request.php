@@ -139,7 +139,7 @@ class Nuxeo_Request
 
       $data = "\r\n". $data .
                   $blobheaders.
-                  $this->_blobList[$cpt][2] . "\r\n"."\r\n";
+                  $blob[2] . "\r\n"."\r\n";
     }
 
     $data   = $data ."--" . $boundary."--";

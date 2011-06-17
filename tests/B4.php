@@ -92,16 +92,16 @@
     }
 
     if ((isset($_FILES['blobPath']) && ($_FILES['blobPath']['error'] == UPLOAD_ERR_OK))) {
-      $targetPath = 'blobs';
+      $targetPath = Configuration::getInstance()->getTempPath();
 
       if (!is_dir('blobs'))
         mkdir('blobs');
 
-      move_uploaded_file($_FILES['blobPath']['tmp_name'], $targetPath.$_FILES['blobPath']['name']);
+      move_uploaded_file($_FILES['blobPath']['tmp_name'], $targetPath.'_'.$_FILES['blobPath']['name']);
     }
 
-    attachBlob($targetPath.$_FILES['blobPath']['name'], $_POST['TargetDocumentPath'], $_FILES['blobPath']['type']);
-    unlink($targetPath.$_FILES['blobPath']['name']);
+    attachBlob($targetPath.'_'.$_FILES['blobPath']['name'], $_POST['TargetDocumentPath'], $_FILES['blobPath']['type']);
+    unlink($targetPath.'_'.$_FILES['blobPath']['name']);
   }
 
 ?>

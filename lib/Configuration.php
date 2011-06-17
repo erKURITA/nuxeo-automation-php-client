@@ -8,13 +8,14 @@
  */
 class Configuration
 {
-  private $_config          = array(
+  private $_config    = array(
     'host'            => 'localhost',
     'port'            => '8080',
     'is_https_secure' => false,
     'username'        => 'Administrator',
     'password'        => 'Administrator',
-    'automation_path' => '/nuxeo/site/automation'
+    'automation_path' => '/nuxeo/site/automation',
+    'temp_path'       => 'blobs'
   );
   private static $_instance = null;
 

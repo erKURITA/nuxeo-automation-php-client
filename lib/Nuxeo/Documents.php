@@ -14,17 +14,12 @@ class Nuxeo_Documents
   {
     $this->_documentsList = null;
     $test = true;
-    if (!empty($newDocList['entries'])) {
-      while (false !== $test) {
-        $this->_documentsList[] = new Nuxeo_Document(current($newDocList['entries']));
-        $test = each($newDocList['entries']);
-      }
-      $test = sizeof($this->_documentsList);
-      unset($this->_documentsList[$test-1]);
-    }
-    elseif(!empty($newDocList['uid'])) {
+    if (!empty($newDocList['entries']))
+      foreach($newDocList['entries'] as $doc_entry)
+        $this->_documentsList[] = new Nuxeo_Document($doc_entry);
+    else if(!empty($newDocList['uid'])) {
       $this->_documentsList[] = new Nuxeo_Document($newDocList);
-    } else if(is_array($newDocList)){
+    } else if(is_array($newDocList)) {
       echo "<pre>";
       var_dump($this);
       echo "<hr />";

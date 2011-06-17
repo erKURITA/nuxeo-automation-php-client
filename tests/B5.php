@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>B4 test php Client</title>
+    <title>B5 test php Client</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" media="screen" type="text/css" title="design" href="/tests/design.css" />
   </head>
   <body>
     <?php include 'nav.php' ?>
+    <br />
     <form action="/B5" method="post">
-      <table>
+      <table style="width: auto">
         <tr>
           <td>File Path</td>
           <td>
@@ -22,7 +23,7 @@
           </td>
         </tr>
         <tr>
-          <td>
+          <td colspan="2">
             <input type="submit" value="Submit"/>
           </td>
         </tr>
