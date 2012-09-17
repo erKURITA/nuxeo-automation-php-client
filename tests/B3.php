@@ -1,5 +1,4 @@
 <?php
-use Nuxeo\Utilities\Utilities as Utils;
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,7 +22,7 @@ use Nuxeo\Utilities\Utilities as Utils;
 
   function DateSearch($date)
   {
-    $utilities      = new Utils();
+    $utilities      = new Nuxeo\Utilities\Utilities();
     $configuration  = NAPC\Configuration::getInstance();
     $client         = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
     $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
@@ -72,7 +71,7 @@ use Nuxeo\Utilities\Utilities as Utils;
     if(!isset($_POST['date']) OR empty($_POST['date'])) {
       echo 'date is empty';
     } else {
-      $top  = new Utils();
+      $top  = new Nuxeo\Utilities\Utilities();
       $date = $top->dateConverterInputToPhp($_POST['date']);
       dateSearch($date);
     }

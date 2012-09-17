@@ -1,5 +1,5 @@
 <?php
-namespace \Nuxeo\Utilities;
+namespace Nuxeo\Utilities;
 
 /**
  *
@@ -17,7 +17,7 @@ class Utilities
 
     $time = '';
     try {
-      $datetime = new DateTime($date);
+      $datetime = new \DateTime($date);
       $time = $datetime->format('Y-m-d');
     } catch (Exception $e) {
       $time = null;
@@ -29,7 +29,7 @@ class Utilities
   public function dateConverterNuxeoToPhp($date)
   {
     $newDate = explode('T', $date);
-    $phpDate = new DateTime($newDate[0]);
+    $phpDate = new \DateTime($newDate[0]);
     return $phpDate;
   }
 
@@ -40,7 +40,7 @@ class Utilities
      * then it must not be correct, thus we can safely exit.
      */
     try {
-      $datetime = new DateTime($date);
+      $datetime = new \DateTime($date);
     } catch (Exception $e) {
       echo 'date not correct';
       exit;
