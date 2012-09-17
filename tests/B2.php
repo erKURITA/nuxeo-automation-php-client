@@ -19,8 +19,8 @@
 
   function fullTextSearch($research)
   {
-    $configuration  = Configuration::getInstance();
-    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $configuration  = NAPC\Configuration::getInstance();
+    $client         = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
     $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
     $answer         = $session->newRequest("Document.Query")
                         ->set('params', 'query', "SELECT * FROM Document WHERE ecm:fulltext = '". $research ."'")

@@ -9,8 +9,8 @@
   {
     $eurl           = explode("/", $path);
     $temp           = str_replace(" ", "", end($eurl));
-    $configuration  = Configuration::getInstance();
-    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $configuration  = NAPC\Configuration::getInstance();
+    $client         = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
     $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
     $answer         = $session->newRequest("Chain.getDocContent")->set('context', 'path', $path)->sendRequest();
 

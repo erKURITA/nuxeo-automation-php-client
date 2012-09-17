@@ -9,7 +9,7 @@
     <?php include 'nav.php' ?>
     <pre>
       Execute a SELECT * FROM Document WHERE ecm:path = Path query to Nuxeo
-      and print all the document porperties.
+      and print all the document properties.
       fill the path field with a correct Path and the Schema field
       with the type of schema to output (if left blank, print all properties)
       </pre>
@@ -25,8 +25,8 @@
 
   function openDocumentPropeties($path, $propertiesSchema = '*')
   {
-    $configuration  = Configuration::getInstance();
-    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $configuration  = NAPC\Configuration::getInstance();
+    $client         = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
     $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
     $answer         = $session->newRequest("Document.Query")
                         ->set('params', 'query', "SELECT * FROM Document WHERE ecm:path = '". $path ."'")

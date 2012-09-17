@@ -1,3 +1,6 @@
+<?php
+use Nuxeo\Utilities\Utilities as Utils;
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -20,9 +23,9 @@
 
   function DateSearch($date)
   {
-    $utilities      = new Nuxeo_Utilities();
-    $configuration  = Configuration::getInstance();
-    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $utilities      = new Utils();
+    $configuration  = NAPC\Configuration::getInstance();
+    $client         = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
     $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
     $answer         = $session->newRequest("Document.Query")
                         ->set('params', 'query', "SELECT * FROM Document WHERE dc:created >= DATE '". $utilities->dateConverterPhpToNuxeo($date) ."'")
@@ -69,7 +72,7 @@
     if(!isset($_POST['date']) OR empty($_POST['date'])) {
       echo 'date is empty';
     } else {
-      $top  = new Nuxeo_Utilities();
+      $top  = new Utils();
       $date = $top->dateConverterInputToPhp($_POST['date']);
       dateSearch($date);
     }

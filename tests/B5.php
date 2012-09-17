@@ -34,8 +34,8 @@
   function GetBlob($path = '/default-domain/workspaces/jkjkj/test2.rtf', $blobtype = 'application/binary')
   {
     $eurl           = explode("/", $path);
-    $configuration  = Configuration::getInstance();
-    $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $configuration  = NAPC\Configuration::getInstance();
+    $client         = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
     $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
     $answer         = $session->newRequest("Blob.Get")->set('input', 'doc: ' . $path)->sendRequest();
 

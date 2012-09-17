@@ -22,8 +22,8 @@
           <td>
 <?php
 
-  $configuration  = Configuration::getInstance();
-  $client         = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+  $configuration  = NAPC\Configuration::getInstance();
+  $client         = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
   $session        = $client->getSession($configuration->getUsername(),$configuration->getPassword());
   $answer         = $session->newRequest("Document.Query")->set('params', 'query', "SELECT * FROM Workspace")->setSchema()->sendRequest();
 
@@ -63,9 +63,9 @@
     // We get the name of the file to use it for the name of the document
     $ename = explode("/", $blob);
 
-    $configuration = Configuration::getInstance();
+    $configuration = NAPC\Configuration::getInstance();
 
-    $client = new Nuxeo_PhpAutomationClient($configuration->getUrl(false));
+    $client = new Nuxeo\PhpAutomationClient($configuration->getUrl(false));
 
     $session = $client->getSession($configuration->getUsername(),$configuration->getPassword());
 
@@ -92,7 +92,7 @@
     }
 
     if ((isset($_FILES['blobPath']) && ($_FILES['blobPath']['error'] == UPLOAD_ERR_OK))) {
-      $targetPath = Configuration::getInstance()->getTempPath();
+      $targetPath = NAPC\Configuration::getInstance()->getTempPath();
 
       if (!is_dir('blobs'))
         mkdir('blobs');
