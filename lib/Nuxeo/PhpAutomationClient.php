@@ -13,6 +13,7 @@ namespace Nuxeo;
 class PhpAutomationClient
 {
   private $url;
+  private $session = '';
 
   public function __construct($url = 'http://localhost:8080/nuxeo/site/automation')
   {
@@ -30,8 +31,8 @@ class PhpAutomationClient
    */
   public function getSession($username = 'Administrator', $password = 'Administrator')
   {
-    $this->session = $username . ":" . $password;
-    $session = new Session\Session($this->url, $this->session);
-    return $session;
+    $username_handle = $username . ":" . $password;
+    $this->session = new Session\Session($this->url, $username_handle);
+    return $this->session;
   }
 }

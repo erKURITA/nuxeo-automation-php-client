@@ -10,47 +10,6 @@ namespace Nuxeo\Utilities;
  */
 class Utilities
 {
-  private $_ini;
-
-  public function dateConverterPhpToNuxeo($date)
-  {
-
-    $time = '';
-    try {
-      $datetime = new \DateTime($date);
-      $time = $datetime->format('Y-m-d');
-    } catch (Exception $e) {
-      $time = null;
-    }
-
-    return $time;
-  }
-
-  public function dateConverterNuxeoToPhp($date)
-  {
-    $newDate = explode('T', $date);
-    $phpDate = new \DateTime($newDate[0]);
-    return $phpDate;
-  }
-
-  public function dateConverterInputToPhp($date)
-  {
-    /**
-     * If given a date from user input and DateTime fails to parse it correctly,
-     * then it must not be correct, thus we can safely exit.
-     */
-    try {
-      $datetime = new \DateTime($date);
-    } catch (Exception $e) {
-      echo 'date not correct';
-      exit;
-    }
-
-    $phpDate = $datetime->format('Y-m-d');
-
-    return $phpDate;
-  }
-
   /**
    *
    * Function Used to get Data from Nuxeo, such as a blob. MUST BE PERSONALISED. (Or just move the
