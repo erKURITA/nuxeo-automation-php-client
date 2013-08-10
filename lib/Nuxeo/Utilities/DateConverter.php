@@ -3,6 +3,7 @@ namespace Nuxeo\Utilities;
 
 /**
  * Class DateConverter
+ *
  * @package Nuxeo\Utilities
  */
 class DateConverter
@@ -10,13 +11,14 @@ class DateConverter
 
     /**
      * @param $date
+     *
      * @return null|string
      */
     public function phpToNuxeo($date)
     {
         try {
             $datetime = new \DateTime($date);
-            $time = $datetime->format('Y-m-d');
+            $time     = $datetime->format('Y-m-d');
         } catch (\Exception $e) {
             $time = null;
         }
@@ -26,17 +28,20 @@ class DateConverter
 
     /**
      * @param $date
+     *
      * @return \DateTime
      */
     public function nuxeoToPhp($date)
     {
         $newDate = explode('T', $date);
         $phpDate = new \DateTime($newDate[0]);
+
         return $phpDate;
     }
 
     /**
      * @param $date
+     *
      * @return string
      */
     public function inputToPhp($date)
@@ -59,12 +64,13 @@ class DateConverter
 
     /**
      * @param $date
+     *
      * @return null|string
      */
     public function inputToNuxeo($date)
     {
-        $phpDate     = $this->inputToPhp($date);
-        $returnDate  = $this->phpToNuxeo($phpDate);
+        $phpDate    = $this->inputToPhp($date);
+        $returnDate = $this->phpToNuxeo($phpDate);
 
         return $returnDate;
     }

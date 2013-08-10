@@ -6,7 +6,7 @@ namespace Nuxeo\Document;
  *
  * Hold an Array of Document
  *
- * @author Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
+ * @author  Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
  * @package Nuxeo\Document
  */
 class Documents
@@ -16,6 +16,7 @@ class Documents
 
     /**
      * @param $newDocList
+     *
      * @throws \Exception
      *
      */
@@ -79,7 +80,8 @@ class Documents
 
     /**
      * @param $number
-     * @return null
+     *
+     * @return null|\Nuxeo\Document\Document
      */
     public function getDocument($number)
     {

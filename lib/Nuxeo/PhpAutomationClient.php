@@ -6,7 +6,7 @@ namespace Nuxeo;
  *
  * Class which initializes the php client with an URL
  *
- * @author Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
+ * @author    Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
  * @namespace Nuxeo
  *
  */
@@ -30,12 +30,14 @@ class PhpAutomationClient
      *
      * @param string $username
      * @param string $password
+     *
      * @return \Nuxeo\Session\Session
      */
     public function getSession($username = 'Administrator', $password = 'Administrator')
     {
-        $usernameHandle = $username . ":" . $password;
-        $this->session = new Session\Session($this->url, $usernameHandle);
+        $usernameHandle = $username.":".$password;
+        $this->session  = new Session\Session($this->url, $usernameHandle);
+
         return $this->session;
     }
 }

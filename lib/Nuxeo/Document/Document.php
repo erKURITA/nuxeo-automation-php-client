@@ -6,7 +6,7 @@ namespace Nuxeo\Document;
  *
  * hold a return document
  *
- * @author Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
+ * @author  Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
  * @package Nuxeo\Document
  */
 class Document
@@ -73,12 +73,12 @@ class Document
     public function output()
     {
         foreach ($this->object as $document) {
-            echo '<td> ' . $document . '</td>';
+            echo '<td> '.$document.'</td>';
         }
 
         if ($this->properties !== null) {
             foreach ($this->object as $key => $property) {
-                echo '<td>' . $key . ' : ' . $property . '</td>';
+                echo '<td>'.$key.' : '.$property.'</td>';
             }
         }
     }
@@ -93,6 +93,7 @@ class Document
 
     /**
      * @param $schemaNamePropertyName
+     *
      * @return null
      */
     public function getProperty($schemaNamePropertyName)

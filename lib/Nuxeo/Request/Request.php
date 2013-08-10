@@ -8,7 +8,7 @@ use Nuxeo\Document\Documents;
  *
  * Request class contents all the functions needed to initialise a request and send it
  *
- * @author Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
+ * @author    Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
  * @namespace Nuxeo\Request
  *
  */
@@ -24,19 +24,19 @@ class Request
     private $xNXVoidOperation;
 
     /**
-     * @param $url
-     * @param $requestId
+     * @param        $url
+     * @param        $requestId
      * @param string $headers
      */
     public function __construct($url, $requestId, $headers = "Content-Type:application/json+nxrequest")
     {
-        $this->url = $url . "/" . $requestId;
-        $this->headers = $headers;
-        $this->finalRequest = '{}';
-        $this->method = 'POST';
-        $this->iterationNumber = 0;
-        $this->headerNxSchemas = 'X-NXDocumentProperties:';
-        $this->blobList = null;
+        $this->url              = $url."/".$requestId;
+        $this->headers          = $headers;
+        $this->finalRequest     = '{}';
+        $this->method           = 'POST';
+        $this->iterationNumber  = 0;
+        $this->headerNxSchemas  = 'X-NXDocumentProperties:';
+        $this->blobList         = null;
         $this->xNXVoidOperation = 'X-NXVoidOperation: true';
     }
 
@@ -48,11 +48,12 @@ class Request
      * cappacity
      *
      * @param string $headerValue Value taken by the header
+     *
      * @author Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
      */
     public function setXNXVoidOperation($headerValue = '*')
     {
-        $this->xNXVoidOperation = 'X-NXVoidOperation:' . $headerValue;
+        $this->xNXVoidOperation = 'X-NXVoidOperation:'.$headerValue;
     }
 
     /**
@@ -61,12 +62,14 @@ class Request
      * Set the schemas in order to obtain file properties
      *
      * @param string $schema Name the schema you want to obtain
+     *
      * @author Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
      * @return $this
      */
     public function setSchema($schema = '*')
     {
-        $this->headers = array($this->headers, $this->headerNxSchemas . $schema);
+        $this->headers = array($this->headers, $this->headerNxSchemas.$schema);
+
         return $this;
     }
 
@@ -75,10 +78,11 @@ class Request
      *
      * This function is used to load data in the request (such as input, context and params fields)
      *
-     * @param string $requestType Contains name of the field
+     * @param string $requestType             Contains name of the field
      * @param string $requestContentOrVarName Contains the name of the var or the content of the field in the case of
-     * an input field
-     * @param string $requestVarVallue Value of the var defined in $requestContentTypeOrVarName (if needed)
+     *                                        an input field
+     * @param string $requestVarVallue        Value of the var defined in $requestContentTypeOrVarName (if needed)
+     *
      * @author Arthur GALLOUIN for NUXEO <agallouin@nuxeo.com>
      * @return $this
      */
@@ -131,44 +135,44 @@ class Request
 
         $this->headers = array($this->headers, 'Content-ID: request');
 
-        $requestheaders = 'Content-Type: application/json+nxrequest; charset=UTF-8' . "\r\n" .
-            'Content-Transfer-Encoding: 8bit' . "\r\n" .
-            'Content-ID: request' . "\r\n" .
-            'Content-Length:' . strlen($this->finalRequest) . "\r\n" . "\r\n";
+        $requestheaders = 'Content-Type: application/json+nxrequest; charset=UTF-8'."\r\n".
+                          'Content-Transfer-Encoding: 8bit'."\r\n".
+                          'Content-ID: request'."\r\n".
+                          'Content-Length:'.strlen($this->finalRequest)."\r\n"."\r\n";
 
-        $boundary = '====Part=' . time() . '=' . (int)rand(0, 1000000000) . '===';
-        $data = "--" . $boundary . "\r\n" .
-            $requestheaders .
-            $this->finalRequest . "\r\n" . "\r\n";
+        $boundary = '====Part='.time().'='.(int)rand(0, 1000000000).'===';
+        $data     = "--".$boundary."\r\n".
+                    $requestheaders.
+                    $this->finalRequest."\r\n"."\r\n";
 
         foreach ($this->blobList as $blob) {
-            $data = $data . "--" . $boundary . "\r\n";
+            $data = $data."--".$boundary."\r\n";
 
-            $blobheaders = 'Content-Type:' . $blob[1] . "\r\n" .
-                'Content-ID: input' . "\r\n" .
-                'Content-Transfer-Encoding: binary' . "\r\n" .
-                'Content-Disposition: attachment;filename=' . $blob[0] .
-                "\r\n" . "\r\n";
+            $blobheaders = 'Content-Type:'.$blob[1]."\r\n".
+                           'Content-ID: input'."\r\n".
+                           'Content-Transfer-Encoding: binary'."\r\n".
+                           'Content-Disposition: attachment;filename='.$blob[0].
+                           "\r\n"."\r\n";
 
-            $data = "\r\n" . $data .
-                $blobheaders .
-                $blob[2] . "\r\n" . "\r\n";
+            $data = "\r\n".$data.
+                    $blobheaders.
+                    $blob[2]."\r\n"."\r\n";
         }
 
-        $data = $data . "--" . $boundary . "--";
+        $data  = $data."--".$boundary."--";
         $final = array(
             'http' => array(
-                'method' => 'POST',
+                'method'  => 'POST',
                 'content' => $data,
-                'header' => 'Accept: application/json+nxentity, */*' . "\r\n" .
-                'Content-Type: multipart/related;boundary="' . $boundary .
-                '";type="application/json+nxrequest";start="request"' .
-                "\r\n" . $this->xNXVoidOperation
+                'header'  => 'Accept: application/json+nxentity, */*'."\r\n".
+                             'Content-Type: multipart/related;boundary="'.$boundary.
+                             '";type="application/json+nxrequest";start="request"'.
+                             "\r\n".$this->xNXVoidOperation
             )
         );
 
-        $final = stream_context_create($final);
-        $filep = fopen($this->url, 'rb', false, $final);
+        $final  = stream_context_create($final);
+        $filep  = fopen($this->url, 'rb', false, $final);
         $answer = stream_get_contents($filep);
         $answer = json_decode($answer, true);
 
@@ -180,8 +184,9 @@ class Request
      * loadBlob function
      * Many blobs could be loaded, they will be store in a blob array
      *
-     * @param $address : contains the path of the file to load
+     * @param $address     : contains the path of the file to load
      * @param $contentType : type of the blob content (default : 'application/binary')
+     *
      * @return $this
      */
     public function loadBlob($address, $contentType = 'application/binary')
@@ -197,8 +202,8 @@ class Request
             echo 'error loading the file';
         }
 
-        $futurBlob = stream_get_contents($filep);
-        $temp = str_replace(" ", "", end($eaddress));
+        $futurBlob        = stream_get_contents($filep);
+        $temp             = str_replace(" ", "", end($eaddress));
         $this->blobList[] = array($temp, $contentType, print_r($futurBlob, true));
 
         return $this;
@@ -220,18 +225,19 @@ class Request
 
             $this->finalRequest = json_encode($this->finalRequest);
             $this->finalRequest = str_replace('\/', '/', $this->finalRequest);
-            $params = array(
+            $params             = array(
                 'http' => array(
-                    'method' => $this->method,
+                    'method'  => $this->method,
                     'content' => $this->finalRequest
-                ));
+                )
+            );
 
             if ($this->headers !== null) {
                 $params['http']['header'] = $this->headers;
             }
 
             $context = stream_context_create($params);
-            $filep = fopen($this->url, 'rb', false, $context);
+            $filep   = fopen($this->url, 'rb', false, $context);
 
             if ($filep === false) {
                 echo "<pre>";
@@ -248,7 +254,7 @@ class Request
                     $documents = $answer;
                     file_put_contents("tempstream", $answer);
                 } else {
-                    $answer = json_decode($answer, true);
+                    $answer    = json_decode($answer, true);
                     $documents = new Documents($answer);
                 }
             }

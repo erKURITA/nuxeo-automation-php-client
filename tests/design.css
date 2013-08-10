@@ -1,49 +1,43 @@
 @CHARSET "UTF-8";
 
 h1 {
-	text-align: center;
-	font-familly: "Arial-Black", Arial, Verdanna, serif;
-	font-size: large;
-}
-
-description {
-	margin-left: 30px;
-	margin-bottom: 20px:
-	font-familly: "Times new Roman", Arial, Verdanna, serif;
-	display: block;
+    text-align: center;
+    font-family: "Arial-Black", Arial, Verdanna, serif;
+    font-size: large;
 }
 
 table {
-	border-style: solid;
-	width: 100%;
-	border-collapse:collapse;
+    border-style: solid;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 th {
-	background-color : #0062FF;
-	color: white;
+    background-color: #0062ff;
+    color: white;
 }
 
 td {
-	border: 1px solid black;
-	padding: 5px;
+    border: 1px solid black;
+    padding: 5px;
 }
 
 input {
-	margin-left: 50px;
+    margin-left: 50px;
 }
+
 nav {
-  border: 1px solid gray;
-  text-align: center;
-  padding: 3px 0px;
-  font-family: courier;
-  font-weight: bold;
+    border: 1px solid gray;
+    text-align: center;
+    padding: 3px 0;
+    font-family: courier, serif;
+    font-weight: bold;
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }

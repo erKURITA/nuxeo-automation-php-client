@@ -6,7 +6,8 @@ namespace NAPC;
  * Class Configuration
  *
  * This class will handle all configuration-related variables
- * @author Alejandro Carrillo <j.alec.n@gmail.com>
+ *
+ * @author  Alejandro Carrillo <j.alec.n@gmail.com>
  *
  * @package NAPC
  *
@@ -29,13 +30,13 @@ namespace NAPC;
 class Configuration
 {
     private $config = array(
-        'host' => 'localhost',
-        'port' => '8080',
+        'host'            => 'localhost',
+        'port'            => '8080',
         'is_https_secure' => false,
-        'username' => 'Administrator',
-        'password' => 'Administrator',
+        'username'        => 'Administrator',
+        'password'        => 'Administrator',
         'automation_path' => '/nuxeo/site/automation',
-        'temp_path' => 'blobs'
+        'temp_path'       => 'blobs'
     );
     private static $instance = null;
 
@@ -57,6 +58,7 @@ class Configuration
      * http://Administrator:Administrator@localhost:8080/nuxeo/site/automation
      *
      * @param bool $withUserHandle
+     *
      * @return string
      */
     public function getURL($withUserHandle = true)
@@ -69,7 +71,8 @@ class Configuration
         }
 
         $fullhost = array($this->getHost());
-        $port = $this->getPort();
+        $port     = $this->getPort();
+
         if ($port != '') {
             $fullhost[] = $port;
         }
@@ -78,7 +81,7 @@ class Configuration
 
         $automationPath = $this->getAutomationPath();
 
-        $url = $protocol . $userHandle . $host . $automationPath;
+        $url = $protocol.$userHandle.$host.$automationPath;
 
         return $url;
     }
@@ -105,16 +108,19 @@ class Configuration
      * Magic method to access and set properties
      *
      * @param string $name
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return mixed|null
      */
     public function __call($name, array $arguments)
     {
         if (strpos($name, 'get') === 0) {
             $name = implode('', explode('get', $name));
+
             return $this->getProperty($name);
         } elseif (strpos($name, 'get') === 0) {
             $name = implode('', explode('set', $name));
+
             return $this->setProperty($name, $arguments[0]);
         }
 
@@ -125,7 +131,8 @@ class Configuration
      * Sets a property with a given value. Triggers an error if the property does not exist.
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return mixed|null
      */
     private function setProperty($name, $value)
@@ -142,7 +149,8 @@ class Configuration
     /**
      * Returns a configuration property, otherwise triggers an error
      *
-     * @param   string  $name
+     * @param   string $name
+     *
      * @return  mixed   Configuration value
      */
     private function getProperty($name)
@@ -159,26 +167,31 @@ class Configuration
     /**
      *
      * Prints a backtrace with the invoking method and the method called.
-     * @param $methodName
+     *
+     * @param        $methodName
      * @param string $method
+     *
      * @return null
      */
     private function error($method, $methodName)
     {
         $trace = debug_backtrace();
         trigger_error(
-            'Undefined property via ' . $method . '(): ' . $methodName .
-            ' in ' . $trace[0]['file'] .
-            ' on line ' . $trace[0]['line'],
+            'Undefined property via '.$method.'(): '.$methodName.
+            ' in '.$trace[0]['file'].
+            ' on line '.$trace[0]['line'],
             E_USER_ERROR
         );
+
         return null;
     }
 
     /**
      *
      * Singleton instantiation which calls Configuration::getInstance()
+     *
      * @param array $configuration Configuration for this class
+     *
      * @return \NAPC\Configuration|null
      */
     public static function createInstance(array $configuration = array())
@@ -189,7 +202,9 @@ class Configuration
     /**
      *
      * Singleton instantiation
+     *
      * @param array $configuration Configuration for this class
+     *
      * @return \NAPC\Configuration|null
      */
     public static function getInstance(array $configuration = array())
@@ -226,6 +241,7 @@ class Configuration
      * - The resulting string is returned.
      *
      * @param string $name
+     *
      * @return string
      */
     public static function deCamelize($name)
@@ -252,6 +268,7 @@ class Configuration
      * - The resulting string is returned.
      *
      * @param string $name
+     *
      * @return string
      */
     public static function camelize($name)
@@ -259,7 +276,7 @@ class Configuration
         $camelized = array_reduce(
             explode('_', strtolower($name)),
             function ($elementa, $elementb) {
-                return ucfirst(trim($elementa)) . '' . ucfirst(trim($elementb));
+                return ucfirst(trim($elementa)).''.ucfirst(trim($elementb));
             }
         );
 
