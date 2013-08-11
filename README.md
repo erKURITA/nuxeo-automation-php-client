@@ -10,6 +10,14 @@ B1 B2 B3 are examples explaining how we can send a query to Nuxeo and how we can
 B4 is used to create a document and attach a blob to it. B5bis is only called from B1, B2 or B3 using the download button at the right of the screen.
 B5 is never called but it's a reference concerning the headers to use and how to do a file transfer.
 
+## REST API
+
+The REST API Operations Index can be found [here] [4]. 
+
+Other resources: <http://doc.nuxeo.com/display/NXDOC56/Operations+Index>
+
+[4]: http://explorer.nuxeo.org/nuxeo/site/distribution/current/listOperations
+
 ## About Nuxeo
 
 Nuxeo provides a modular, extensible Java-based [open source software
